@@ -29,16 +29,16 @@
   .logo-icon {
     width: 104px;
     height: 104px;
-    margin-bottom: 16px;
+    margin-bottom: 8px;
     object-fit: contain;
   }
 
   .logo-text {
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 700;
     letter-spacing: 4px;
     text-transform: uppercase;
-    color: #E84B2F;
+    color: #1a1a1a;
   }
 
   h1 {
@@ -259,15 +259,15 @@
     <div class="logo-text">Proximity</div>
   </div>
 
-  <h1>Tell us what you're looking for</h1>
-  <p class="subtitle">Fill this out for free personalized housing recommendations.</p>
+  <h1 id="formHeading">Tell us what you're looking for</h1>
+  <p class="subtitle" id="formSubtitle">Fill this out for free personalized housing recommendations.</p>
 
   <!-- 
     =============================================
     FORMSPREE SETUP:
     1. Go to formspree.io and create a free account
     2. Create a new form and copy your form ID
-    3. Replace YOUR_FORM_ID below with your actual ID
+    3. Replace xkoqolpy below with your actual ID
        e.g. https://formspree.io/f/xpznqkdl
     =============================================
   -->
@@ -445,6 +445,8 @@
 
       if (response.ok) {
         form.style.display = 'none';
+        document.getElementById('formHeading').style.display = 'none';
+        document.getElementById('formSubtitle').style.display = 'none';
         successMsg.style.display = 'block';
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
