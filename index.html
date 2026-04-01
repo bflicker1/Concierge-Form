@@ -148,6 +148,29 @@
     font-size: 14px;
     color: #999;
   }
+  .other-text {
+    display: none;
+    margin-top: 10px;
+  }
+
+  .other-text input {
+    width: 100%;
+    padding: 12px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    border: 1.5px solid #E0DED8;
+    border-radius: 10px;
+    background: #fff;
+    color: #1a1a1a;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+
+  .other-text input:focus {
+    border-color: #E84B2F;
+    box-shadow: 0 0 0 3px rgba(232, 75, 47, 0.1);
+  }
+
 
 
   .radio-group, .checkbox-group {
@@ -382,6 +405,10 @@
         <div class="radio-option"><input type="radio" name="lease_term" id="lt1" value="Semester only" required><label for="lt1">Semester only</label></div>
         <div class="radio-option"><input type="radio" name="lease_term" id="lt2" value="Full year only"><label for="lt2">Full year only</label></div>
         <div class="radio-option"><input type="radio" name="lease_term" id="lt3" value="Open to either"><label for="lt3">Open to either</label></div>
+        <div class="radio-option"><input type="radio" name="lease_term" id="lt4" value="Other"><label for="lt4">Other</label></div>
+      </div>
+      <div class="other-text" id="leaseOther">
+        <input type="text" name="lease_term_other" placeholder="e.g. Summer sublease, month-to-month...">
       </div>
     </div>
 
@@ -424,6 +451,10 @@
         <div class="checkbox-option"><input type="checkbox" name="priorities" id="p5" value="Most space for best price"><label for="p5">Most space for best price</label></div>
         <div class="checkbox-option"><input type="checkbox" name="priorities" id="p6" value="Close to other WashU students"><label for="p6">Close to other WashU students</label></div>
         <div class="checkbox-option"><input type="checkbox" name="priorities" id="p7" value="Cheapest option available"><label for="p7">Cheapest option available</label></div>
+        <div class="checkbox-option"><input type="checkbox" name="priorities" id="p8" value="Other"><label for="p8">Other</label></div>
+      </div>
+      <div class="other-text" id="prioritiesOther">
+        <input type="text" name="priorities_other" placeholder="What else matters to you?">
       </div>
       <div class="student-type-prompt" id="studentTypePrompt" style="display:none; margin-top: 12px;">
         <label>Are you an undergraduate or graduate student?</label>
@@ -442,6 +473,10 @@
         <div class="radio-option"><input type="radio" name="area" id="a2" value="Central West End"><label for="a2">Central West End</label></div>
         <div class="radio-option"><input type="radio" name="area" id="a3" value="Clayton"><label for="a3">Clayton</label></div>
         <div class="radio-option"><input type="radio" name="area" id="a4" value="No preference"><label for="a4">No preference</label></div>
+        <div class="radio-option"><input type="radio" name="area" id="a5" value="Other"><label for="a5">Other</label></div>
+      </div>
+      <div class="other-text" id="areaOther">
+        <input type="text" name="area_other" placeholder="e.g. Dogtown, Maplewood, U City...">
       </div>
     </div>
 
@@ -508,6 +543,52 @@
     studentPrompt.style.display = washuCheckbox.checked ? 'block' : 'none';
     if (!washuCheckbox.checked) {
       document.querySelectorAll('input[name="student_type"]').forEach(r => r.checked = false);
+    }
+  });
+
+
+  // Show/hide "Other" text inputs
+  // Lease term
+  document.querySelectorAll('input[name="lease_term"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      const otherBox = document.getElementById('leaseOther');
+      const otherInput = otherBox.querySelector('input');
+      if (radio.value === 'Other' && radio.checked) {
+        otherBox.style.display = 'block';
+        otherInput.focus();
+      } else {
+        otherBox.style.display = 'none';
+        otherInput.value = '';
+      }
+    });
+  });
+
+  // Preferred area
+  document.querySelectorAll('input[name="area"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      const otherBox = document.getElementById('areaOther');
+      const otherInput = otherBox.querySelector('input');
+      if (radio.value === 'Other' && radio.checked) {
+        otherBox.style.display = 'block';
+        otherInput.focus();
+      } else {
+        otherBox.style.display = 'none';
+        otherInput.value = '';
+      }
+    });
+  });
+
+  // Priorities (checkbox)
+  const priorityOtherCb = document.getElementById('p8');
+  priorityOtherCb.addEventListener('change', () => {
+    const otherBox = document.getElementById('prioritiesOther');
+    const otherInput = otherBox.querySelector('input');
+    if (priorityOtherCb.checked) {
+      otherBox.style.display = 'block';
+      otherInput.focus();
+    } else {
+      otherBox.style.display = 'none';
+      otherInput.value = '';
     }
   });
 
