@@ -740,6 +740,10 @@
       const formData = new FormData();
       formData.append('_source', 'exit_poll');
       formData.append('exit_feedback', feedback);
+      const nameVal = document.getElementById('name') ? document.getElementById('name').value.trim() : '';
+      const yearVal = document.getElementById('year_of_school') ? document.getElementById('year_of_school').value : '';
+      if (nameVal) formData.append('name', nameVal);
+      if (yearVal) formData.append('year_of_school', yearVal);
       try {
         await fetch('https://formspree.io/f/mnjozlzn', {
           method: 'POST',
