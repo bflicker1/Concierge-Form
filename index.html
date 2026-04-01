@@ -102,6 +102,53 @@
     resize: vertical;
     min-height: 80px;
   }
+  select {
+    width: 100%;
+    padding: 14px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    border: 1.5px solid #E0DED8;
+    border-radius: 10px;
+    background: #fff;
+    color: #1a1a1a;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23999' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    cursor: pointer;
+  }
+
+  select:focus {
+    border-color: #E84B2F;
+    box-shadow: 0 0 0 3px rgba(232, 75, 47, 0.1);
+  }
+
+  .exit-poll {
+    display: none;
+    margin-top: 24px;
+    text-align: center;
+  }
+
+  .exit-poll p {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 12px;
+  }
+
+  .exit-poll .checkbox-group {
+    justify-content: center;
+  }
+
+  .exit-poll-thanks {
+    display: none;
+    margin-top: 12px;
+    font-size: 14px;
+    color: #999;
+  }
+
 
   .radio-group, .checkbox-group {
     display: flex;
@@ -288,6 +335,19 @@
       <input type="email" id="email" name="email" placeholder="you@wustl.edu" required>
     </div>
 
+    <div class="form-group">
+      <label for="year">Year of school <span class="label-hint">Optional</span></label>
+      <select id="year" name="year_of_school">
+        <option value="" selected>Select your year</option>
+        <option value="Freshman">Freshman</option>
+        <option value="Sophomore">Sophomore</option>
+        <option value="Junior">Junior</option>
+        <option value="Senior">Senior</option>
+        <option value="Masters">Masters</option>
+        <option value="PhD">PhD</option>
+      </select>
+    </div>
+
     <div class="divider"></div>
 
     <!-- 3. Group size -->
@@ -363,6 +423,7 @@
         <div class="checkbox-option"><input type="checkbox" name="priorities" id="p4" value="Strong amenities (gym, pool)"><label for="p4">Strong amenities (gym, pool)</label></div>
         <div class="checkbox-option"><input type="checkbox" name="priorities" id="p5" value="Most space for best price"><label for="p5">Most space for best price</label></div>
         <div class="checkbox-option"><input type="checkbox" name="priorities" id="p6" value="Close to other WashU students"><label for="p6">Close to other WashU students</label></div>
+        <div class="checkbox-option"><input type="checkbox" name="priorities" id="p7" value="Cheapest option available"><label for="p7">Cheapest option available</label></div>
       </div>
       <div class="student-type-prompt" id="studentTypePrompt" style="display:none; margin-top: 12px;">
         <label>Are you an undergraduate or graduate student?</label>
@@ -392,6 +453,20 @@
       <textarea id="notes" name="notes" placeholder="Parking needs, pet situation, move-in timing, roommate preferences..."></textarea>
     </div>
 
+    <div class="form-group">
+      <label for="referral">How did you hear about us? <span class="label-hint">Optional</span></label>
+      <select id="referral" name="referral_source">
+        <option value="" selected>Select one</option>
+        <option value="Instagram">Instagram</option>
+        <option value="TikTok">TikTok</option>
+        <option value="Friend / word of mouth">Friend / word of mouth</option>
+        <option value="GroupMe">GroupMe</option>
+        <option value="WashU Facebook group">WashU Facebook group</option>
+        <option value="Flyer on campus">Flyer on campus</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+
     <button type="submit" class="submit-btn">Get My Recommendations</button>
     <p class="footer-note">We'll get back to you within 48 hours with personalized picks.</p>
   </form>
@@ -403,6 +478,16 @@
     </div>
     <h2>You're all set!</h2>
     <p>We've got your preferences and we'll send you personalized housing recommendations within 48 hours. Keep an eye on your inbox.</p>
+    <div class="exit-poll" id="exitPoll">
+      <p>One last thing — what almost stopped you from filling this out? <span style="color:#bbb">(Optional)</span></p>
+      <div class="checkbox-group" style="justify-content: center;">
+        <div class="radio-option"><input type="radio" name="exit_feedback" id="ef1" value="Too many questions"><label for="ef1">Too many questions</label></div>
+        <div class="radio-option"><input type="radio" name="exit_feedback" id="ef2" value="Wasn't sure it's legit"><label for="ef2">Wasn't sure it's legit</label></div>
+        <div class="radio-option"><input type="radio" name="exit_feedback" id="ef3" value="Didn't want to share email"><label for="ef3">Didn't want to share email</label></div>
+        <div class="radio-option"><input type="radio" name="exit_feedback" id="ef4" value="Nothing, it was easy"><label for="ef4">Nothing, it was easy</label></div>
+      </div>
+      <p class="exit-poll-thanks" id="exitPollThanks">Thanks! This helps us improve.</p>
+    </div>
   </div>
 </div>
 
@@ -449,6 +534,10 @@
         document.getElementById('formSubtitle').style.display = 'none';
         successMsg.style.display = 'block';
         window.scrollTo({ top: 0, behavior: 'smooth' });
+        // Show exit poll after a short delay
+        setTimeout(() => {
+          document.getElementById('exitPoll').style.display = 'block';
+        }, 1500);
       } else {
         btn.textContent = 'Something went wrong — try again';
         btn.disabled = false;
@@ -457,6 +546,24 @@
       btn.textContent = 'Something went wrong — try again';
       btn.disabled = false;
     }
+  });
+
+  // Exit poll handler — sends feedback as separate Formspree submission
+  document.querySelectorAll('input[name="exit_feedback"]').forEach(radio => {
+    radio.addEventListener('change', async () => {
+      const feedback = radio.value;
+      const formData = new FormData();
+      formData.append('_source', 'exit_poll');
+      formData.append('exit_feedback', feedback);
+      try {
+        await fetch('https://formspree.io/f/xkoqolpy', {
+          method: 'POST',
+          body: formData,
+          headers: { 'Accept': 'application/json' }
+        });
+      } catch (err) {}
+      document.getElementById('exitPollThanks').style.display = 'block';
+    });
   });
 </script>
 
