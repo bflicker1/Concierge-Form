@@ -319,6 +319,34 @@
     h1 { font-size: 24px; }
     .radio-option label, .checkbox-option label { padding: 9px 14px; font-size: 13px; }
   }
+
+  .error-msg {
+    display: none;
+    color: #E84B2F;
+    font-size: 13px;
+    margin-top: 6px;
+    font-weight: 500;
+  }
+
+  .field-error .error-msg {
+    display: block;
+  }
+
+  .field-error input[type="text"],
+  .field-error input[type="email"] {
+    border-color: #E84B2F;
+  }
+
+  .field-error .radio-option label,
+  .field-error .checkbox-option label {
+    border-color: transparent;
+  }
+
+  .field-error .radio-group,
+  .field-error .checkbox-group {
+    outline: none;
+  }
+
 </style>
 </head>
 <body>
@@ -341,7 +369,7 @@
        e.g. https://formspree.io/f/xpznqkdl
     =============================================
   -->
-  <form id="proximityForm" action="https://formspree.io/f/xkoqolpy" method="POST">
+  <form id="proximityForm" action="https://formspree.io/f/xkoqolpy" method="POST" novalidate>
     
     <!-- Hidden field for source tracking -->
     <input type="hidden" name="_source" value="concierge_form">
@@ -349,13 +377,15 @@
     <!-- 1. Name -->
     <div class="form-group">
       <label for="name">Name</label>
-      <input type="text" id="name" name="name" placeholder="First and last name" required>
+      <input type="text" id="name" name="name" placeholder="First and last name">
+      <span class="error-msg" id="err-name">Please enter your name.</span>
     </div>
 
     <!-- 2. Email -->
     <div class="form-group">
       <label for="email">Email <span class="label-hint">WashU email preferred</span></label>
-      <input type="email" id="email" name="email" placeholder="you@wustl.edu" required>
+      <input type="email" id="email" name="email" placeholder="you@wustl.edu">
+      <span class="error-msg" id="err-email">Please enter a valid email.</span>
     </div>
 
     <div class="form-group">
@@ -377,36 +407,39 @@
     <div class="form-group">
       <label>How many people total, including yourself?</label>
       <div class="radio-group">
-        <div class="radio-option"><input type="radio" name="group_size" id="gs1" value="1" required><label for="gs1">Just me</label></div>
+        <div class="radio-option"><input type="radio" name="group_size" id="gs1" value="1"><label for="gs1">Just me</label></div>
         <div class="radio-option"><input type="radio" name="group_size" id="gs2" value="2"><label for="gs2">2</label></div>
         <div class="radio-option"><input type="radio" name="group_size" id="gs3" value="3"><label for="gs3">3</label></div>
         <div class="radio-option"><input type="radio" name="group_size" id="gs4" value="4"><label for="gs4">4</label></div>
         <div class="radio-option"><input type="radio" name="group_size" id="gs5" value="5+"><label for="gs5">5+</label></div>
       </div>
+      <span class="error-msg" id="err-group_size">Please select how many people.</span>
     </div>
 
     <!-- 4. Budget -->
     <div class="form-group">
       <label>Monthly budget per person?</label>
       <div class="radio-group">
-        <div class="radio-option"><input type="radio" name="budget" id="b1" value="Under $800" required><label for="b1">Under $800</label></div>
+        <div class="radio-option"><input type="radio" name="budget" id="b1" value="Under $800"><label for="b1">Under $800</label></div>
         <div class="radio-option"><input type="radio" name="budget" id="b2" value="$800-$1,000"><label for="b2">$800–$1,000</label></div>
         <div class="radio-option"><input type="radio" name="budget" id="b3" value="$1,000-$1,300"><label for="b3">$1,000–$1,300</label></div>
         <div class="radio-option"><input type="radio" name="budget" id="b4" value="$1,300-$1,600"><label for="b4">$1,300–$1,600</label></div>
         <div class="radio-option"><input type="radio" name="budget" id="b5" value="$1,600+"><label for="b5">$1,600+</label></div>
         <div class="radio-option"><input type="radio" name="budget" id="b6" value="Not sure"><label for="b6">Not sure</label></div>
       </div>
+      <span class="error-msg" id="err-budget">Please select a budget range.</span>
     </div>
 
     <!-- 5. Lease term -->
     <div class="form-group">
       <label>Lease term preference?</label>
       <div class="radio-group">
-        <div class="radio-option"><input type="radio" name="lease_term" id="lt1" value="Semester only" required><label for="lt1">Semester only</label></div>
+        <div class="radio-option"><input type="radio" name="lease_term" id="lt1" value="Semester only"><label for="lt1">Semester only</label></div>
         <div class="radio-option"><input type="radio" name="lease_term" id="lt2" value="Full year only"><label for="lt2">Full year only</label></div>
         <div class="radio-option"><input type="radio" name="lease_term" id="lt3" value="Open to either"><label for="lt3">Open to either</label></div>
         <div class="radio-option"><input type="radio" name="lease_term" id="lt4" value="Other"><label for="lt4">Other</label></div>
       </div>
+      <span class="error-msg" id="err-lease_term">Please select a lease term.</span>
       <div class="other-text" id="leaseOther">
         <input type="text" name="lease_term_other" placeholder="e.g. Summer sublease, month-to-month...">
       </div>
@@ -416,10 +449,11 @@
     <div class="form-group">
       <label>Furnished or unfurnished?</label>
       <div class="radio-group">
-        <div class="radio-option"><input type="radio" name="furnished" id="f1" value="Furnished" required><label for="f1">Furnished</label></div>
+        <div class="radio-option"><input type="radio" name="furnished" id="f1" value="Furnished"><label for="f1">Furnished</label></div>
         <div class="radio-option"><input type="radio" name="furnished" id="f2" value="Unfurnished"><label for="f2">Unfurnished</label></div>
         <div class="radio-option"><input type="radio" name="furnished" id="f3" value="No preference"><label for="f3">No preference</label></div>
       </div>
+      <span class="error-msg" id="err-furnished">Please select a preference.</span>
     </div>
 
     <div class="divider"></div>
@@ -428,12 +462,13 @@
     <div class="form-group">
       <label>How do you plan to commute to campus?</label>
       <div class="radio-group">
-        <div class="radio-option"><input type="radio" name="commute" id="c1" value="Car" required><label for="c1">Car</label></div>
+        <div class="radio-option"><input type="radio" name="commute" id="c1" value="Car"><label for="c1">Car</label></div>
         <div class="radio-option"><input type="radio" name="commute" id="c2" value="Walk/Bike"><label for="c2">Walk / Bike</label></div>
         <div class="radio-option"><input type="radio" name="commute" id="c3" value="Campus shuttle"><label for="c3">Campus shuttle</label></div>
         <div class="radio-option"><input type="radio" name="commute" id="c4" value="Public transit"><label for="c4">Public transit</label></div>
         <div class="radio-option"><input type="radio" name="commute" id="c5" value="Not sure yet"><label for="c5">Not sure yet</label></div>
       </div>
+      <span class="error-msg" id="err-commute">Please select your commute method.</span>
       <div class="medical-campus">
         <input type="checkbox" id="medical" name="medical_campus" value="Yes">
         <label for="medical">I'll be commuting to the Medical Campus</label>
@@ -469,12 +504,13 @@
     <div class="form-group">
       <label>Preferred area?</label>
       <div class="radio-group">
-        <div class="radio-option"><input type="radio" name="area" id="a1" value="The Loop" required><label for="a1">The Loop</label></div>
+        <div class="radio-option"><input type="radio" name="area" id="a1" value="The Loop"><label for="a1">The Loop</label></div>
         <div class="radio-option"><input type="radio" name="area" id="a2" value="Central West End"><label for="a2">Central West End</label></div>
         <div class="radio-option"><input type="radio" name="area" id="a3" value="Clayton"><label for="a3">Clayton</label></div>
         <div class="radio-option"><input type="radio" name="area" id="a4" value="No preference"><label for="a4">No preference</label></div>
         <div class="radio-option"><input type="radio" name="area" id="a5" value="Other"><label for="a5">Other</label></div>
       </div>
+      <span class="error-msg" id="err-area">Please select a preferred area.</span>
       <div class="other-text" id="areaOther">
         <input type="text" name="area_other" placeholder="e.g. Dogtown, Maplewood, U City...">
       </div>
@@ -596,8 +632,66 @@
   const form = document.getElementById('proximityForm');
   const successMsg = document.getElementById('successMessage');
 
+  // Clear error on any interaction with a field
+  form.querySelectorAll('input, select, textarea').forEach(el => {
+    el.addEventListener('change', () => {
+      const group = el.closest('.form-group');
+      if (group) group.classList.remove('field-error');
+    });
+    el.addEventListener('input', () => {
+      const group = el.closest('.form-group');
+      if (group) group.classList.remove('field-error');
+    });
+  });
+
+  function validateForm() {
+    let firstError = null;
+    let valid = true;
+
+    // Clear all existing errors
+    form.querySelectorAll('.form-group').forEach(g => g.classList.remove('field-error'));
+
+    function markError(groupEl) {
+      groupEl.classList.add('field-error');
+      if (!firstError) firstError = groupEl;
+      valid = false;
+    }
+
+    // Name
+    const nameGrp = document.getElementById('name').closest('.form-group');
+    if (!document.getElementById('name').value.trim()) markError(nameGrp);
+
+    // Email
+    const emailEl = document.getElementById('email');
+    const emailGrp = emailEl.closest('.form-group');
+    if (!emailEl.value.trim() || !emailEl.value.includes('@')) markError(emailGrp);
+
+    // Required radio groups
+    [
+      { name: 'group_size', id: 'gs1' },
+      { name: 'budget', id: 'b1' },
+      { name: 'lease_term', id: 'lt1' },
+      { name: 'furnished', id: 'f1' },
+      { name: 'commute', id: 'c1' },
+      { name: 'area', id: 'a1' }
+    ].forEach(({ name, id }) => {
+      const checked = form.querySelector('input[name="' + name + '"]:checked');
+      if (!checked) {
+        const grp = document.getElementById(id).closest('.form-group');
+        markError(grp);
+      }
+    });
+
+    if (firstError) {
+      firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    return valid;
+  }
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
+
     const btn = form.querySelector('.submit-btn');
     btn.textContent = 'Sending...';
     btn.disabled = true;
